@@ -1,0 +1,15 @@
+set_io clkin  21
+
+set_io vga_r  119
+set_io vga_g  118
+set_io vga_b  117
+
+set_io vga_hs 116
+set_io vga_vs 115
+
+set_io D5     95
+
+set_io wclk   44
+set_io dc     45
+set_io din    47
+set_io cs     48
