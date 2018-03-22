@@ -54,9 +54,7 @@ begin
         end // dc = low, ignore command
     end
     else
-    begin
         waddr <= 0;
-    end
 end
 
 parameter h_pulse  = 96;  // h-sunc pulse width
