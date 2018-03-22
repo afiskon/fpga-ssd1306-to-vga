@@ -98,8 +98,10 @@ always_ff @(posedge clk) begin
     end
 
     // are we inside centered 512x256 area plus border?
-    if((h_pos >= h_offset - border) && (h_pos < (h_pixels - h_offset + border)) &&
-       (v_pos >= v_offset - border) && (v_pos < (v_pixels - v_offset + border)))
+    if((h_pos >= h_offset - border) &&
+       (h_pos < (h_pixels - h_offset + border)) &&
+       (v_pos >= v_offset - border) &&
+       (v_pos < (v_pixels - v_offset + border)))
     begin
         if((h_pos >= h_offset) && (h_pos < h_pixels - h_offset) &&
            (v_pos >= v_offset) && (v_pos < v_pixels - v_offset))
@@ -111,10 +113,18 @@ always_ff @(posedge clk) begin
             // Y = (v_pos - v_offset) >> 2
             raddr <= (
                       (
-                       ((h_pos - h_offset) >> 2) | // X +
-                       (((((v_pos - v_offset) >> 2) /* Y */ >> 3 /* div 8 */) & 3'b111) << 7 /* mul 128 */)
-                      ) << 3 /* mul 8 (size of byte in bits) */
-                     ) | (7 - (((v_pos - v_offset) >> 2) & 3'b111)); // + (7 - (Y % 8))
+                       // X
+                       ((h_pos - h_offset) >> 2) |
+                       (
+                          //  Y  div 8
+                          ((((v_pos - v_offset) >> 2) >> 3) & 3'b111)
+                          // mul 128
+                          << 7
+                       )
+                       // mul 8 (size of byte in bits)
+                      ) << 3
+                        // + (7 - (Y % 8))
+                     ) | (7 - (((v_pos - v_offset) >> 2) & 3'b111));
         end
         else // outside centered area, draw the border
             color <= 1;
